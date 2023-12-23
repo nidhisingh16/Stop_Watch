@@ -1,3 +1,4 @@
+
 package com.example.stopwatchnoob
 
 import android.app.Dialog
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     var isRunning = false
-    private var minutes:String?="00.00.00"
+    private var minutes: String? = "00.00.00"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +24,13 @@ class MainActivity : AppCompatActivity() {
         var lapsList = ArrayList<String>()
         var arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lapsList)
         binding.listView.adapter = arrayAdapter
-        binding.lap.setOnClickListener{
-            if(isRunning){
-                lapsList.add(binding.chronometer.text.toString())
+        binding.lap.setOnClickListener {
+            if (isRunning) {
+                lapsList.add(0, binding.chronometer.text.toString())
                 arrayAdapter.notifyDataSetChanged()
+                binding.listView.smoothScrollToPosition(0)
             }
         }
-
 
         binding.clock.setOnClickListener {
             var dialog = Dialog(this)
@@ -37,16 +38,16 @@ class MainActivity : AppCompatActivity() {
             var numberPicker = dialog.findViewById<NumberPicker>(R.id.numberPicker)
             numberPicker.minValue = 0
             numberPicker.maxValue = 5
-            dialog.findViewById<Button>(R.id.setTime).setOnClickListener{
-//                minutes = numberPicker.value.toString()
-                binding.clockTime.text = dialog.findViewById<NumberPicker>(R.id.numberPicker).value.toString()+" min"
+            dialog.findViewById<Button>(R.id.setTime).setOnClickListener {
+                binding.clockTime.text =
+                    dialog.findViewById<NumberPicker>(R.id.numberPicker).value.toString() + " min"
                 dialog.dismiss()
             }
             dialog.show()
         }
         binding.run.setOnClickListener {
             if (!isRunning) {
-                isRunning = false
+                isRunning = true
                 if (!minutes.equals("00.00.00")) {
                     var totalmin = minutes!!.toInt() * 60 * 1000L
                     var countDown = 1000L
@@ -62,8 +63,7 @@ class MainActivity : AppCompatActivity() {
                                 binding.run.text = "Run"
                             }
                         }
-                }
-                else {
+                } else {
                     isRunning = true
                     binding.chronometer.base = SystemClock.elapsedRealtime()
                     binding.run.text = "Stop"
@@ -78,3 +78,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
